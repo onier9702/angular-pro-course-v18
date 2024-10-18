@@ -1,47 +1,59 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { OnePokemon } from '../../interfaces/one-pokemon.interface';
-import { PokemonService } from '../../services/pokemon.service';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { tap } from 'rxjs';
 
+import { PokemonService } from '../../services/pokemon.service';
+
+import { OnePokemon } from '../../interfaces/one-pokemon.interface';
+
 @Component({
-  selector: 'app-one-pokemon',
+  selector: 'one-pokemon',
   standalone: true,
-  imports: [],
+  imports: [
+    CommonModule,
+  ],
   templateUrl: './one-pokemon.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class OnePokemonComponent implements OnInit {
 
+  private pokemonsService = inject(PokemonService);
   private route = inject(ActivatedRoute);
-  private pokemonService = inject(PokemonService);
   private title = inject(Title);
   private meta = inject(Meta);
 
-  public pokemon = signal<OnePokemon|null>(null);
+  public pokemon = signal<OnePokemon | null>(null);
 
   ngOnInit(): void {
-    const pokemonId: string = this.route.snapshot.paramMap.get('id') ?? '1';
-    this.loadPokemon(+pokemonId);
-  }
+    const id = this.route.snapshot.paramMap.get('id');
+    if (!id) return;
 
-  loadPokemon(pokemonId: number): void {
-    this.pokemonService.loadPokemon(pokemonId)
-    .pipe(
-      tap(pokemon => {
-        const pageTitle = `#${pokemon.id}-${pokemon.name}`;
-        this.title.setTitle(pageTitle);
-        this.meta.updateTag({ name: 'description', content: `Pokemon page ${pokemon.id}` });
-        this.meta.updateTag({ name: 'og:title', content: pageTitle });
-        this.meta.updateTag({ name: 'og:description', content: `Pokemon page ${pokemon.id}` });
-        this.meta.updateTag({ name: 'og:image', content: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${pokemon.id}.png` });
-      })
-    )
-    .subscribe(pokemon => {
-      if (pokemon && pokemon.id) {
-        this.pokemon.set(pokemon);
-      }
-    });
+    this.pokemonsService
+      .loadPokemon(id)
+      .pipe(
+        tap(({ name, id }) => {
+          const pageTitle = `#${id} - ${name}`;
+          const pageDescription = `Página del Pokémon ${name}`;
+          this.title.setTitle(pageTitle);
+
+          this.meta.updateTag({
+            name: 'description',
+            content: pageDescription,
+          });
+          this.meta.updateTag({ name: 'og:title', content: pageTitle });
+          this.meta.updateTag({
+            name: 'og:description',
+            content: pageDescription,
+          });
+          this.meta.updateTag({
+            name: 'og:image',
+            content: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`,
+          });
+        })
+      )
+      .subscribe(this.pokemon.set);
   }
 
 }
