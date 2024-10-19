@@ -2,10 +2,15 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
 
+  // to use prerendering
   {
-    path: 'pokemons',
+    path: 'pokemons/page/:page',
     loadComponent: () => import('./pages/pokemons/pokemons.component'),
   },
+  // {
+  //   path: 'pokemons',
+  //   loadComponent: () => import('./pages/pokemons/pokemons.component'),
+  // },
   {
     path: 'pokemons/:id',
     loadComponent: () => import('./pages/one-pokemon/one-pokemon.component'),
