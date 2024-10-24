@@ -30,11 +30,12 @@ export const routes: Routes = [
 
   {
     path: '**',
-    redirectTo: () => {
-      // const authService = inject(AuthService)
+    redirectTo: 'about', // it is the same
+    // redirectTo: () => {
+    //   // const authService = inject(AuthService)
 
-      return 'about';
-    },
+    //   return 'about';
+    // },
   }
 
 ];

@@ -64,7 +64,7 @@ export default class PokemonsComponent {
   public loadOnPageParamChanges = effect(() => {
     // console.log('Page changed to: ', this.currentPage());
     this.loadPokemons(this.currentPage()!);
-    console.log('Test ocurred: ', this.test());
+    // console.log('Test ocurred: ', this.test());
   }, {
     allowSignalWrites: true, // to avoid this error: Writing to signals is not allowed in a `computed` or an `effect` by default. Use `allowSignalWrites` in the `CreateEffectOptions` to enable this inside effects.
   });

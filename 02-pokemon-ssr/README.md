@@ -2,7 +2,13 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.5.
 
-# Instalations
+# Testing
+
+1. Add testing to build application (important when using CI/CD)
+   Add this line to package.json file
+   ng test --no-watch --no-progress --browsers=ChromeHeadless
+
+# Installations
 
 1. Install taiwind
 
