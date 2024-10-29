@@ -1,8 +1,9 @@
 import { Injectable, signal } from '@angular/core';
-import { injectQuery } from '@tanstack/angular-query-experimental';
+import { injectQuery, injectQueryClient } from '@tanstack/angular-query-experimental';
 
 import { getIssueByNumber } from '../actions/get-issue-by-number';
 import { getComments } from '../actions/get-comments';
+import { GithubIssue } from '../interfaces/github-issue.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { getComments } from '../actions/get-comments';
 export class IssueService {
 
   private issueNumber = signal<string|null>(null);
+  private queryClient = injectQueryClient();
 
   public issueByNumberQuery = injectQuery(() => ({
     queryKey: ['issue', this.issueNumber()],
@@ -25,6 +27,21 @@ export class IssueService {
 
   setIssueNumber(issueId: string) {
     this.issueNumber.set(issueId);
+  }
+
+  public prefetchIssue(issueId: string) {
+    this.queryClient.prefetchQuery({
+      queryKey: ['issue', issueId],
+      queryFn: () => getIssueByNumber(issueId),
+      staleTime: 1000 * 60 * 5, // minutes
+    });
+  }
+
+  public setIssueData(issue: GithubIssue) {
+    this.queryClient.setQueryData(
+      ['issue', issue.number.toString()],
+      issue,
+    )
   }
 
 }
