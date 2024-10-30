@@ -1,0 +1,9 @@
+<h1>Hello world</h1>
+<h2>Hello world again</h2>
+
+<lib-apx-aside-menu
+  [isAuthenticated]="isAuthenticated()"
+  [titleColor]="TitleColor.green"
+  (onSignIn)="isAuthenticated.set(true)"
+  (onSignOut)="isAuthenticated.set(false)"
+/>
