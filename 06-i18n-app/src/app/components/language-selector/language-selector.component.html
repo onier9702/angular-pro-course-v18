@@ -1,0 +1,7 @@
+<p class="mt-10">{{ "changeLanguage" | translate }}</p>
+<h2>TEST CURRENT LANG: {{ currentLang() }}</h2>
+<select [value]="currentLang()" (change)="onChangeLanguage($event)">
+  @for (flag of languages(); track flag.code) {
+  <option [value]="flag.code">{{ flag.flag }} {{ flag.code }}</option>
+  }
+</select>
