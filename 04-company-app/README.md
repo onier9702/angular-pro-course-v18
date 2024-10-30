@@ -14,6 +14,12 @@ This app was created with the objective to use the aside-menu npm package we upl
 npm i apx-aside-menu
 ```
 
+# Update dependencies
+
+```
+ng update <package-name>
+```
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
